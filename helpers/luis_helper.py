@@ -104,18 +104,15 @@ class LuisHelper:
                 '''
 
                 # "or_city" entity
-                or_city = recognizer_result.entities.get("$instance", {}).get('or_city', [])
-                print('or_city:', or_city)
+                or_city = recognizer_result.entities.get('or_city', [])
                 if len(or_city) > 0:
-                    #if recognizer_result.entities.get('or_city', [{"$instance": {}}])[0]:
-                    result.or_city = or_city[0]["text"].capitalize()
+                    result.or_city = or_city[0].capitalize()
 
                 # "dst_city" entity
-                dst_city = recognizer_result.entities.get("$instance", {}).get('dst_city', [])
+                dst_city = recognizer_result.entities.get('dst_city', [])
                 print('dst_city:', dst_city)
                 if len(dst_city) > 0:
-                    #if recognizer_result.entities.get('dst_city', [{"$instance": {}}])[0]:
-                    result.dst_city = dst_city[0]["text"].capitalize()
+                    result.dst_city = dst_city[0].capitalize()
                 
                 # "str_date" entity
                 str_date = recognizer_result.entities.get('str_date', [])
@@ -128,9 +125,6 @@ class LuisHelper:
                         result.str_date = datetime
                     '''
                     result.str_date = str_date[0]
-
-                else:
-                    result.str_date = None
                 
                 # "end_date" entity
                 end_date = recognizer_result.entities.get('end_date', [])
@@ -143,16 +137,12 @@ class LuisHelper:
                         result.end_date = datetime
                     '''
                     result.end_date = end_date[0]
-
-                else:
-                    result.str_date = None
                 
                 # "budget" entity
-                budget = recognizer_result.entities.get("$instance", {}).get('budget', [])
+                budget = recognizer_result.entities.get('budget', [])
                 print('budget:', budget)
                 if len(budget) > 0:
-                    #if recognizer_result.entities.get('budget', [{"$instance": {}}])[0]["$instance"]:
-                    result.budget = budget[0]["text"]
+                    result.budget = budget[0]
 
 
                 '''

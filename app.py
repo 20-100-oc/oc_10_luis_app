@@ -33,6 +33,17 @@ from bots import DialogAndWelcomeBot
 
 from adapter_with_error_handler import AdapterWithErrorHandler
 from flight_booking_recognizer import FlightBookingRecognizer
+'''
+try:
+    from .local_config_file import set_env_variables
+    env = 'local'
+except:
+    env = 'cloud'
+
+
+if env == 'local':
+    set_env_variables()
+'''
 
 CONFIG = DefaultConfig()
 

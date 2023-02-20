@@ -84,7 +84,17 @@ class DateResolverDialog(CancelAndHelpDialog):
 
     async def final_step(self, step_context: WaterfallStepContext):
         """Cleanup - set final return value and end dialog."""
-        timex = step_context.result[0].timex
+        #print('str_date step_context.result:', step_context.result, '\n')
+        #print(step_context.result, '\n')
+        #print(step_context.result.timex, '\n')
+        
+        try:
+            # from LUIS
+            timex = step_context.result.timex
+        except AttributeError:
+            # from date prompt
+            timex = step_context.result[0].timex
+        
         return await step_context.end_dialog(timex)
 
 

@@ -89,15 +89,15 @@ class MainDialog(ComponentDialog):
 
         #TODO check luis response
         print('\nLUIS result:')
-        print('or_city:', luis_result.or_city)
-        print('dst_city:', luis_result.dst_city)
-        print('str_date:', luis_result.str_date)
-        print('end_date:', luis_result.end_date)
-        print('budget:', luis_result.budget)        
+        print('Or_city:', luis_result.or_city)
+        print('Dst_city:', luis_result.dst_city)
+        print('Str_date:', luis_result.str_date)
+        print('End_date:', luis_result.end_date)
+        print('Budget:', luis_result.budget)        
         print()
 
         if intent == Intent.BOOK_FLIGHT.value and luis_result:
-            # Show a warning for Origin and Destination if we can't resolve them.
+            # Show a warning for origin and destination if we can't resolve them.
             #await MainDialog._show_warning_for_unsupported_cities(step_context.context, luis_result)
 
             # Run the BookingDialog giving it whatever details we have from the LUIS call.

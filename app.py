@@ -33,18 +33,10 @@ from bots import DialogAndWelcomeBot
 
 from adapter_with_error_handler import AdapterWithErrorHandler
 from flight_booking_recognizer import FlightBookingRecognizer
-'''
-try:
-    from .local_config_file import set_env_variables
-    env = 'local'
-except:
-    env = 'cloud'
 
 
-if env == 'local':
-    set_env_variables()
-'''
 
+# if execution is local, 
 CONFIG = DefaultConfig()
 
 # Create adapter.
@@ -97,11 +89,34 @@ async def messages(req: Request) -> Response:
     return Response(status=HTTPStatus.OK)
 
 
+# original code
+
 APP = web.Application(middlewares=[bot_telemetry_middleware, aiohttp_error_middleware])
 APP.router.add_post("/api/messages", messages)
 
 if __name__ == "__main__":
     try:
         web.run_app(APP, host="localhost", port=CONFIG.PORT)
+        #TODO maybe this ?
+        #web.run_app(APP, host="0.0.0.0", port=CONFIG.PORT)
     except Exception as error:
         raise error
+
+
+'''
+def init_func(self):
+    APP = web.Application(
+        middlewares=[bot_telemetry_middleware, aiohttp_error_middleware]
+    )
+    APP.router.add_post("/api/messages", messages)
+    return APP
+
+
+if __name__ == "__main__":
+    print("Starting bot...")
+    APP = init_func(main)
+    try:
+        web.run_app(APP, host="localhost", port=CONFIG.PORT)
+    except Exception as error:
+        raise error
+'''

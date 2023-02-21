@@ -27,11 +27,3 @@ class BookingDetails:
         self.str_date = str_date
         self.end_date = end_date
         self.budget = budget
-
-'''
-or_city
-dst_city
-str_date
-end_date
-budget
-'''

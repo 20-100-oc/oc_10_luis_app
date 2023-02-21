@@ -38,8 +38,7 @@ class LuisHelper:
         result = None
         intent = None
 
-        #try:
-        if 1 == 1:
+        try:
             recognizer_result = await luis_recognizer.recognize(turn_context)
 
             intent = (
@@ -95,28 +94,22 @@ class LuisHelper:
                     result.travel_date = None
                 '''
 
-                '''
-                or_city
-                dst_city
-                str_date
-                end_date
-                budget
-                '''
 
                 # "or_city" entity
                 or_city = recognizer_result.entities.get('or_city', [])
+                #print('or_city:', or_city)
                 if len(or_city) > 0:
                     result.or_city = or_city[0].capitalize()
 
                 # "dst_city" entity
                 dst_city = recognizer_result.entities.get('dst_city', [])
-                print('dst_city:', dst_city)
+                #print('dst_city:', dst_city)
                 if len(dst_city) > 0:
                     result.dst_city = dst_city[0].capitalize()
                 
                 # "str_date" entity
                 str_date = recognizer_result.entities.get('str_date', [])
-                print('str_date:', str_date)
+                #print('str_date:', str_date)
                 if len(str_date) > 0:
                     '''
                     timex = str_date[0]["timex"]
@@ -128,7 +121,7 @@ class LuisHelper:
                 
                 # "end_date" entity
                 end_date = recognizer_result.entities.get('end_date', [])
-                print('end_date:', end_date)
+                #print('end_date:', end_date)
                 if len(end_date) > 0:
                     '''
                     timex = end_date[0]["timex"]
@@ -140,60 +133,13 @@ class LuisHelper:
                 
                 # "budget" entity
                 budget = recognizer_result.entities.get('budget', [])
-                print('budget:', budget)
+                #print('budget:', budget)
                 if len(budget) > 0:
                     result.budget = budget[0]
 
 
-                '''
-                # "or_city" entity
-                or_city = recognizer_result.entities.get('or_city', [])
-                result.or_city = or_city[0].capitalize()
-
-                # "dst_city" entity
-                dst_city = recognizer_result.entities.get('dst_city', [])
-                result.dst_city = dst_city[0].capitalize()
-                
-                # "str_date" entity
-                str_date = recognizer_result.entities.get('str_date', [])
-                result.str_date = str_date[0]
-                
-                # "end_date" entity
-                end_date = recognizer_result.entities.get('end_date', [])
-                result.end_date = end_date[0]
-
-                # "budget" entity
-                budget = recognizer_result.entities.get('budget', [])
-                result.budget = budget[0]
-                '''
-
-                '''
-                # "or_city" entity
-                or_city = recognizer_result.entities.get("$instance", {}).get('or_city', [])
-                if len(or_city) > 0:
-                    if recognizer_result.entities.get('or_city', [{"$instance": {}}])[0]["$instance"]:
-                        result.or_city = or_city[0]["text"].capitalize()
-
-                # "dst_city" entity
-                dst_city = recognizer_result.entities.get("$instance", {}).get('dst_city', [])
-                if len(dst_city) > 0:
-                    if recognizer_result.entities.get('dst_city', [{"$instance": {}}])[0]["$instance"]:
-                        result.dst_city = dst_city[0]["text"].capitalize()
-                
-                # "str_date" entity
-                str_date = recognizer_result.entities.get('str_date', [])
-                if str_date:
-                    timex = str_date[0]["timex"]
-                    if timex:
-                        datetime = timex[0].split("T")[0]
-                        result.str_date = datetime
-                else:
-                    result.str_date = None
-                '''
-
-
-        #except Exception as exception:
-        #    print('\nEncountered exeption:')
-        #    print(exception)
+        except Exception as exception:
+            print('\nEncountered exeption in "luis_helper.py":')
+            print(exception, '\n')
 
         return intent, result

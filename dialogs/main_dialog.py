@@ -88,13 +88,13 @@ class MainDialog(ComponentDialog):
         )
 
         #TODO check luis response
-        print('\nLUIS result:')
-        print('Or_city:', luis_result.or_city)
-        print('Dst_city:', luis_result.dst_city)
-        print('Str_date:', luis_result.str_date)
-        print('End_date:', luis_result.end_date)
-        print('Budget:', luis_result.budget)        
-        print()
+        #print('\nLUIS result:')
+        #print('Or_city:', luis_result.or_city)
+        #print('Dst_city:', luis_result.dst_city)
+        #print('Str_date:', luis_result.str_date)
+        #print('End_date:', luis_result.end_date)
+        #print('Budget:', luis_result.budget)        
+        #print()
 
         if intent == Intent.BOOK_FLIGHT.value and luis_result:
             # Show a warning for origin and destination if we can't resolve them.

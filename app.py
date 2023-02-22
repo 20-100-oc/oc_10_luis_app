@@ -89,7 +89,7 @@ async def messages(req: Request) -> Response:
 
 
 # original code
-
+'''
 APP = web.Application(middlewares=[bot_telemetry_middleware, aiohttp_error_middleware])
 APP.router.add_post("/api/messages", messages)
 
@@ -100,9 +100,9 @@ if __name__ == "__main__":
         #web.run_app(APP, host='0.0.0.0', port=CONFIG.PORT)
     except Exception as error:
         raise error
-
-
 '''
+
+
 def init_func(self):
     APP = web.Application(
         middlewares=[bot_telemetry_middleware, aiohttp_error_middleware]
@@ -113,9 +113,8 @@ def init_func(self):
 
 if __name__ == "__main__":
     print("Starting bot...")
-    APP = init_func(main)
+    APP = init_func(None)
     try:
         web.run_app(APP, host="localhost", port=CONFIG.PORT)
     except Exception as error:
         raise error
-'''

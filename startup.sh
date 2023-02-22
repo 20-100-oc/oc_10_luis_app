@@ -1,1 +1,1 @@
-python -m aiohttp.web -H 0.0.0.0 -P 8000 app:APP
+python -m aiohttp.web -H 0.0.0.0 -P 8000 app:init_func

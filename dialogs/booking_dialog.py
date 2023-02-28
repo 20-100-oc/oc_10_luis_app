@@ -16,6 +16,17 @@ from .date_resolver_dialog import DateResolverDialog
 from .date_return_resolver_dialog import ReturnDateResolverDialog
 
 
+from config import DefaultConfig
+
+from opencensus.ext.azure.trace_exporter import AzureExporter
+from opencensus.trace.samplers import ProbabilitySampler
+from opencensus.trace.tracer import Tracer
+
+#import logging
+#from opencensus.ext.azure.log_exporter import AzureLogHandler
+
+
+
 class BookingDialog(CancelAndHelpDialog):
     """Flight booking implementation."""
 
@@ -179,13 +190,49 @@ class BookingDialog(CancelAndHelpDialog):
 
     async def final_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
         """Complete the interaction and end the dialog."""
-        if step_context.result:
-            booking_details = step_context.options
-            booking_details.str_date = step_context.result
+        booking_details = step_context.options
 
+        # Capture the results of the previous step
+        user_confirmation = step_context.result
+
+        CONFIG = DefaultConfig()
+        connection_string = f'InstrumentationKey={CONFIG.APPINSIGHTS_INSTRUMENTATION_KEY}'
+
+        #logger = logging.getLogger(__name__)
+        #logger.addHandler(AzureLogHandler(connection_string=connection_string))
+
+        tracer = Tracer(
+            exporter=AzureExporter(connection_string=connection_string),
+            sampler=ProbabilitySampler(1.0)
+        )
+
+        if user_confirmation:
+            # booking successfull
+            print('Booking successfull')
             return await step_context.end_dialog(booking_details)
-
+        
+        # booking unsuccessfull
+        with tracer.span(name='span_booking_failure'):
+            print('Booking unsuccessfull')
+        #logger.warning('warning_booking_failure')
         return await step_context.end_dialog()
+
+
+    '''
+    async def final_step(self, step_context: WaterfallStepContext) -> DialogTurnResult:
+        """Complete the interaction and end the dialog."""
+        booking_details = step_context.options
+
+        # Capture the results of the previous step
+        user_confirmation = step_context.result
+        print(user_confirmation)
+
+        if user_confirmation:
+            # booking successfull
+            return await step_context.end_dialog(booking_details)
+        # booking unsuccessfull
+        return await step_context.end_dialog()
+    '''
 
 
     def is_ambiguous(self, timex: str) -> bool:

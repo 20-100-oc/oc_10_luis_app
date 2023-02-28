@@ -22,6 +22,7 @@ from helpers.luis_helper import LuisHelper, Intent
 from .booking_dialog import BookingDialog
 
 
+
 class MainDialog(ComponentDialog):
     def __init__(
         self,
@@ -113,6 +114,29 @@ class MainDialog(ComponentDialog):
 
         #else:
         #    didnt_understand_text = (
+        #    "Sorry, I didn't get that. Please try asking in a different way"
+        #    )
+        #    self.telemetry_client.track_event(
+        #        name="intent-not-understood",
+        #        properties={"step_context_index":str(step_context.index),
+        #                    "user_input":step_context.result}
+        #    )
+        #    didnt_understand_message = MessageFactory.text(
+        #        didnt_understand_text, didnt_understand_text, InputHints.ignoring_input
+        #    )
+        #    await step_context.context.send_activity(didnt_understand_message)
+        
+        else:
+            didnt_understand_text = (
+                "Sorry, I didn't get that. Please try asking in a different way"
+            )
+            didnt_understand_message = MessageFactory.text(
+                didnt_understand_text, didnt_understand_text, InputHints.ignoring_input
+            )
+            await step_context.context.send_activity(didnt_understand_message)
+
+        #else:
+        #    didnt_understand_text = (
         #        "Sorry, I didn't get that. Please try asking in a different way"
         #    )
         #    didnt_understand_message = MessageFactory.text(
@@ -120,20 +144,6 @@ class MainDialog(ComponentDialog):
         #    )
         #    await step_context.context.send_activity(didnt_understand_message)
 
-        else:
-            didnt_understand_text = (
-            "Sorry, I didn't get that. Please try asking in a different way"
-            )
-            self.telemetry_client.track_event(
-                name="not-understood",
-                properties={"step_context_index":str(step_context.index),
-                            "user_input":step_context.result}
-            )
-            didnt_understand_message = MessageFactory.text(
-                didnt_understand_text, didnt_understand_text, InputHints.ignoring_input
-            )
-            await step_context.context.send_activity(didnt_understand_message)
-        
 
         return await step_context.next(None)
 

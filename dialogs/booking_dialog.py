@@ -15,15 +15,9 @@ from .cancel_and_help_dialog import CancelAndHelpDialog
 from .date_resolver_dialog import DateResolverDialog
 from .date_return_resolver_dialog import ReturnDateResolverDialog
 
-
+import logging
 from config import DefaultConfig
-
-from opencensus.ext.azure.trace_exporter import AzureExporter
-from opencensus.trace.samplers import ProbabilitySampler
-from opencensus.trace.tracer import Tracer
-
-#import logging
-#from opencensus.ext.azure.log_exporter import AzureLogHandler
+from opencensus.ext.azure.log_exporter import AzureLogHandler
 
 
 
@@ -195,26 +189,20 @@ class BookingDialog(CancelAndHelpDialog):
         # Capture the results of the previous step
         user_confirmation = step_context.result
 
+        # prepare to send info to app insights
         CONFIG = DefaultConfig()
         connection_string = f'InstrumentationKey={CONFIG.APPINSIGHTS_INSTRUMENTATION_KEY}'
-
-        #logger = logging.getLogger(__name__)
-        #logger.addHandler(AzureLogHandler(connection_string=connection_string))
-
-        tracer = Tracer(
-            exporter=AzureExporter(connection_string=connection_string),
-            sampler=ProbabilitySampler(1.0)
-        )
+        logger = logging.getLogger(__name__)
+        logger.addHandler(AzureLogHandler(connection_string=connection_string))
 
         if user_confirmation:
-            # booking successfull
+            # booking successfull, conclude dialog
             print('Booking successfull')
             return await step_context.end_dialog(booking_details)
         
-        # booking unsuccessfull
-        with tracer.span(name='span_booking_failure'):
-            print('Booking unsuccessfull')
-        #logger.warning('warning_booking_failure')
+        # booking unsuccessfull, send failure to app insights and cancel dialog
+        print('Booking unsuccessfull')
+        logger.warning('warning_booking_failure')
         return await step_context.end_dialog()
 
 

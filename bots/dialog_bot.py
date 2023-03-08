@@ -62,6 +62,7 @@ class DialogBot(ActivityHandler):
         """
         Sets the telemetry client for logging events.
         """
+        
         if value is None:
             self._telemetry_client = NullTelemetryClient()
         else:

@@ -75,13 +75,13 @@ BOT = DialogAndWelcomeBot(CONVERSATION_STATE, USER_STATE, DIALOG, TELEMETRY_CLIE
 # Listen for incoming requests on /api/messages.
 async def messages(req: Request) -> Response:
     # Main bot message handler.
-    if "application/json" in req.headers["Content-Type"]:
+    if 'application/json' in req.headers['Content-Type']:
         body = await req.json()
     else:
         return Response(status=HTTPStatus.UNSUPPORTED_MEDIA_TYPE)
 
     activity = Activity().deserialize(body)
-    auth_header = req.headers["Authorization"] if "Authorization" in req.headers else ""
+    auth_header = req.headers['Authorization'] if 'Authorization' in req.headers else ''
 
     response = await ADAPTER.process_activity(activity, auth_header, BOT.on_turn)
     if response:
@@ -89,34 +89,19 @@ async def messages(req: Request) -> Response:
     return Response(status=HTTPStatus.OK)
 
 
-# original code
-'''
-APP = web.Application(middlewares=[bot_telemetry_middleware, aiohttp_error_middleware])
-APP.router.add_post("/api/messages", messages)
-
-if __name__ == "__main__":
-    try:
-        web.run_app(APP, host="localhost", port=CONFIG.PORT)
-        #TODO maybe this ?
-        #web.run_app(APP, host='0.0.0.0', port=CONFIG.PORT)
-    except Exception as error:
-        raise error
-'''
-
 
 def init_func(self):
     APP = web.Application(
         middlewares=[bot_telemetry_middleware, aiohttp_error_middleware]
     )
-    APP.router.add_post("/api/messages", messages)
+    APP.router.add_post('/api/messages', messages)
     return APP
 
 
-if __name__ == "__main__":
-    print("Starting bot...")
+if __name__ == '__main__':
+    print('Starting bot...')
     APP = init_func(None)
     try:
-        #web.run_app(APP, host="localhost", port=CONFIG.PORT)
         web.run_app(APP, host='0.0.0.0', port=CONFIG.PORT)
     except Exception as error:
         raise error

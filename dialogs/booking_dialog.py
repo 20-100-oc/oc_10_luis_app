@@ -189,19 +189,26 @@ class BookingDialog(CancelAndHelpDialog):
         # Capture the results of the previous step
         user_confirmation = step_context.result
 
-        # prepare to send info to app insights
+        # setup the warning (in case the booking fails)
         CONFIG = DefaultConfig()
         connection_string = f'InstrumentationKey={CONFIG.APPINSIGHTS_INSTRUMENTATION_KEY}'
         logger = logging.getLogger(__name__)
         logger.addHandler(AzureLogHandler(connection_string=connection_string))
 
+        # setup the log (predictions from the bot)
+        propreties = step_context.options.__dict__
+
         if user_confirmation:
-            # booking successfull, conclude dialog
+            # booking successfull: send log, conclude dialog            
             print('Booking successfull')
+            self.telemetry_client.track_event('booking_success', properties=propreties)
+            self.telemetry_client.flush()
             return await step_context.end_dialog(booking_details)
         
-        # booking unsuccessfull, send failure to app insights and cancel dialog
+        # booking unsuccessfull: send log and failure warning, cancel dialog
         print('Booking unsuccessfull')
+        self.telemetry_client.track_event('booking_failure', properties=propreties)
+        self.telemetry_client.flush()
         logger.warning('warning_booking_failure')
         return await step_context.end_dialog()
 

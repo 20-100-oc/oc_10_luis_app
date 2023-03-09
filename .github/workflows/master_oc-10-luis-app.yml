@@ -36,11 +36,11 @@ jobs:
       - name: Run unit tests
         env: 
           PORT: ${{secrets.PORT}}
-          LUIS_APP_ID: ${{secrets.LUISAPPID}}
-          LUIS_API_KEY: ${{secrets.LUISAPIKEY}}
-          LUIS_API_HOST_NAME: ${{secrets.LUISAPIHOSTNAME}}
-          APPINSIGHTS_INSTRUMENTATION_KEY: ${{secrets.APPINSIGHTSINSTRUMENTATIONKEY}}
-          LUIS_APP_ENDPOINT: ${{secrets.LUISAPPENDPOINT}}
+          LuisAppId: ${{secrets.LUISAPPID}}
+          LuisAPIKey: ${{secrets.LUISAPIKEY}}
+          LuisAPIHostName: ${{secrets.LUISAPIHOSTNAME}}
+          AppInsightsInstrumentationKey: ${{secrets.APPINSIGHTSINSTRUMENTATIONKEY}}
+          LuisAppEndpoint: ${{secrets.LUISAPPENDPOINT}}
         run: python -m unittest unit_tests/dialog_tests.py
       
       - name: Upload artifact for deployment jobs

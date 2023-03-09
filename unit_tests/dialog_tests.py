@@ -1,13 +1,15 @@
+# To run the test from terminal: python -m unittest <path to this file>
+# exemple: python -m unittest unit_tests/dialog_tests.py
+
 import os
 import unittest
 
 from azure.cognitiveservices.language.luis.runtime import LUISRuntimeClient
 from msrest.authentication import CognitiveServicesCredentials
 
-'''
+
+
 class TestConfig:
-    """Configuration for the bot."""
-    
     PORT = int(os.environ.get("PORT", ""))
     APP_ID = os.environ.get("MicrosoftAppId", "")
     APP_PASSWORD = os.environ.get("MicrosoftAppPassword", "")
@@ -15,25 +17,23 @@ class TestConfig:
     LUIS_API_KEY = os.environ.get("LuisAPIKey", "")
     LUIS_API_HOST_NAME = os.environ.get("LuisAPIHostName", "")
     APPINSIGHTS_INSTRUMENTATION_KEY = os.environ.get("AppInsightsInstrumentationKey", "")
-'''
+    LUIS_APP_ENDPOINT = os.environ.get("LuisAppEndpoint", "")
 
 
 
 class BookingFlightTest(unittest.TestCase):
 
     def setUp(self):
-        #TODO config = testConfig()
-        luis_api_key = 'd26e02e38289497ab88ab9cf3381479a'
-        luis_app_id = '448b542a-1140-48af-a909-207052d7fc5a'
-
-        #TODO prediction_endpoint != LUIS_API_HOST_NAME
-        luis_prediciton_endpoint = 'https://oc-10-luis-prediction-1.cognitiveservices.azure.com/'
+        config = TestConfig()
+        luis_app_id = config.LUIS_APP_ID
+        luis_api_key = config.LUIS_API_KEY
+        luis_app_endpoint = config.LUIS_APP_ENDPOINT
 
         runtimeCredentials = CognitiveServicesCredentials(luis_api_key)
-        runtime_client = LUISRuntimeClient(endpoint=luis_prediciton_endpoint, credentials=runtimeCredentials)
+        runtime_client = LUISRuntimeClient(endpoint=luis_app_endpoint, credentials=runtimeCredentials)
 
-        self.runtime_client = runtime_client
         self.luis_app_id = luis_app_id
+        self.runtime_client = runtime_client
 
 
     def extract_entity(self, entity_name, response):
